@@ -1,15 +1,28 @@
-app = 'edge-crew-ai-worker'
-primary_region = 'iad'
+# fly.toml app configuration file generated for gce-ai-edge-crew-v3 on 2026-06-18T04:35:13Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'gce-ai-edge-crew-v3'
+primary_region = 'ams'
 
 [build]
   dockerfile = 'Dockerfile.worker'
 
+[env]
+  AI_WORKER_JOB_TIMEOUT = '600'
+  AI_WORKER_KALSHI_SYNC_INTERVAL = '3600'
+  AI_WORKER_POLL_INTERVAL = '5'
+  PYTHONUNBUFFERED = '1'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
 [[vm]]
   size = 'shared-cpu-2x'
   memory = '2gb'
-
-[env]
-  PYTHONUNBUFFERED = '1'
-  AI_WORKER_POLL_INTERVAL = '5'
-  AI_WORKER_JOB_TIMEOUT = '600'
-  AI_WORKER_KALSHI_SYNC_INTERVAL = '3600'
